@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kinoprokat.DataBase;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace Kinoprokat
         [STAThread]
         static void Main()
         {
+            DBControl db = new DBControl("Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = C:\\Users\\maxza\\source\repos\\Kinoprokat\\DataBase\\Database1.mdf; Integrated Security = True");
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
