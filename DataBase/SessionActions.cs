@@ -5,7 +5,7 @@ using Kinoprokat.Classes;
 
 namespace Kinoprokat.DataBase
 {
-    class SessionActions
+    public class SessionActions
     {
         private readonly string _connectionString;
 

@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace Kinoprokat.DataBase
 {
-    class HallAction
+    public class HallAction
     {
         private readonly string _connectionString;
 

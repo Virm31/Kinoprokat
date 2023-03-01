@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kinoprokat.DataBase;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,11 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsFormsApp1
+namespace Kinoprokat
 {
     
     public partial class Form1 : Form
     {
+
+        DBControl DB;
         DataTable dt1;
         DataTable dt2;
         DataTable dt3;
@@ -21,8 +24,9 @@ namespace WindowsFormsApp1
         string[,] data2;
         string[,] data3;
         string[,] data4;
-        public Form1()
+        public Form1(DBControl db)
         {
+            DB = db;
             InitializeComponent();
 
         }
@@ -34,6 +38,7 @@ namespace WindowsFormsApp1
                 "Сборы", "Сеансы", "Средняя стоимость билетов" };
             dt1 = CreateDataTable(columnNames1);
 
+            
             string[,] data1 = {
                 { "Фильм 1", new DateTime(2023, 3, 1).ToString(), "1", "100", "1500", "10", "150" },
                 { "Фильм 2", new DateTime(2023, 3, 8).ToString(), "2", "200", "3000", "20", "180" },
@@ -216,125 +221,8 @@ namespace WindowsFormsApp1
             dataGridView1.DataSource = dt1;
         }
 
-        //public class Movie
-        //{
-        //    public string Title { get; set; } // Название фильма
-        //    public int Duration { get; set; } // Длительность фильма в минутах
-        //    public int Price { get; set; } // Цена билета на фильм
+        
 
-        //    public Movie(string title, int duration, int price)
-        //    {
-        //        Title = title;
-        //        Duration = duration;
-        //        Price = price;
-        //    }
-        //}
-
-        //public class MovieSchedule
-        //{
-        //    public Movie Movie { get; set; } // Фильм, который будет показываться на сеансе
-        //    public string StartTime { get; set; } // Время начала сеанса
-
-        //    public MovieSchedule(Movie movie, DateTime startTime, DateTime endTime)
-        //    {
-        //        Movie = movie;
-        //        StartTime = startTime;
-        //        EndTime = endTime;
-        //    }
-        //}
-
-        //public List<MovieSchedule> GenerateShowtimes(List<Movie> movies, TimeSpan startTime, TimeSpan endTime, TimeSpan interval)
-        //{
-        //    var schedules = new List<MovieSchedule>();
-
-        //    foreach (var movie in movies)
-        //    {
-        //        // Создание расписания для каждого дня недели
-        //        for (int i = 0; i < 7; i++)
-        //        {
-        //            var currentDate = DateTime.Today.AddDays(i);
-        //            var currentTime = currentDate + startTime;
-
-        //            // Создание расписания сеансов для каждого фильма на конкретный день
-        //            while (currentTime <= currentDate + endTime)
-        //            {
-        //                schedules.Add(new MovieSchedule(movie, currentTime, currentTime + movie.Duration));
-        //                currentTime += interval;
-        //            }
-        //        }
-        //    }
-
-        //    return schedules;
-        //}
-
-
-        //public static Dictionary<DayOfWeek, List<MovieSchedule>> GenerateSchedule(List<Movie> movies)
-        //{
-        //    var scheduleByDayOfWeek = new Dictionary<DayOfWeek, List<MovieSchedule>>();
-
-        //    // генерируем расписание для каждого дня недели
-        //    foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
-        //    {
-        //        var movieSchedules = new List<MovieSchedule>();
-
-        //        // генерируем расписание для каждого фильма
-        //        foreach (var movie in movies)
-        //        {
-        //            var showtimes = GenerateShowtimes(dayOfWeek, movie.Duration);
-
-        //            if (showtimes.Count > 0)
-        //            {
-        //                var movieSchedule = new MovieSchedule(movie, showtimes);
-        //                movieSchedules.Add(movieSchedule);
-        //            }
-        //        }
-
-        //        scheduleByDayOfWeek[dayOfWeek] = movieSchedules;
-        //    }
-
-        //    return scheduleByDayOfWeek;
-        //}
-
-        //// метод для заполнения ComboBox фильмами
-        //private void PopulateMovieComboBox()
-        //{
-        //    // очищаем ComboBox и добавляем все фильмы из movies в него
-        //    comboBoxMovies.Items.Clear();
-        //    foreach (var movie in movies)
-        //    {
-        //        comboBoxMovies.Items.Add(movie);
-        //    }
-        //}
-
-        //// метод для обновления расписания в DataGridView
-        //private void UpdateSchedule()
-        //{
-        //    // получаем выбранный день недели из ComboBox
-        //    DayOfWeek dayOfWeek = (DayOfWeek)comboBoxDayOfWeek.SelectedItem;
-
-        //    // получаем выбранный фильм из ComboBox
-        //    Movie selectedMovie = (Movie)comboBoxMovies.SelectedItem;
-
-        //    // генерируем расписание сеансов для выбранного дня недели
-        //    var schedule = GenerateSchedule(movies)[dayOfWeek];
-
-        //    // если выбран фильм, фильтруем расписание по фильму
-        //    if (selectedMovie != null)
-        //    {
-        //        schedule = schedule.Where(ms => ms.Movie == selectedMovie).ToList();
-        //    }
-
-        //    // заполняем DataGridView расписанием сеансов
-        //    dataGridViewSchedule.Rows.Clear();
-        //    foreach (var movieSchedule in schedule)
-        //    {
-        //        var row = new DataGridViewRow();
-        //        row.CreateCells(dataGridViewSchedule);
-        //        row.Cells[0].Value = movieSchedule.Movie.Title;
-        //        row.Cells[1].Value = string.Join(", ", movieSchedule.Showtimes.Select(st => st.ToString("hh:mm tt")));
-        //        dataGridViewSchedule.Rows.Add(row);
-        //    }
-        //}
 
     }
 }

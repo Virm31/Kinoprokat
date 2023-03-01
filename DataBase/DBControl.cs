@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Kinoprokat.DataBase
 {
-    class DBControl
+    public class DBControl
     {
         private readonly string _connectionString;
 
-        MovieActions movieControl;
-        SeatActions seatControl;
-        SessionActions sessionControl;
-        TicketActions ticketControl;
+        public MovieActions movieControl;
+        public SeatActions seatControl;
+        public SessionActions sessionControl;
+        public TicketActions ticketControl;
 
         public DBControl(string connectionString)
         {

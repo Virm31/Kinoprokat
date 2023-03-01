@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kinoprokat.Classes
 {
-    class Hall
+    public class Hall
     {
         public int Id { get; set; }
         public string Name { get; set; }

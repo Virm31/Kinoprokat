@@ -5,7 +5,7 @@ using Kinoprokat.Classes;
 
 namespace Kinoprokat.DataBase
 {
-    class TicketActions
+    public class TicketActions
     {
         private readonly string _connectionString;
 
@@ -14,32 +14,34 @@ namespace Kinoprokat.DataBase
             _connectionString = connectionString;
         }
 
-        public void AddTickets(int session_id,  int seat_id, int price)
+        public void AddTickets(int session_id,  int seat_id, int price, bool sold)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
-                var command = new SqlCommand("INSERT INTO tickets (session_id, seat_id, price) VALUES (@SessionId, @SeatId, @Price)", connection);
+                var command = new SqlCommand("INSERT INTO tickets (session_id, seat_id, price, sold) VALUES (@SessionId, @SeatId, @Price, @Sold)", connection);
                 command.Parameters.AddWithValue("@SessionId", session_id);
                 command.Parameters.AddWithValue("@SeatId", seat_id);
                 command.Parameters.AddWithValue("@Price", price);
+                command.Parameters.AddWithValue("@Sold", sold);
 
                 command.ExecuteNonQuery();
             }
         }
 
-        public void UpdateTicket(int id, int session_id, int seat_id, int price)
+        public void UpdateTicket(int id, int session_id, int seat_id, int price, bool sold)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
-                var command = new SqlCommand("UPDATE tickets SET session_id = @SessionId, seat_id = @SeatId, price = @Price WHERE id = @Id", connection);
+                var command = new SqlCommand("UPDATE tickets SET session_id = @SessionId, seat_id = @SeatId, price = @Price, sold = @Sold WHERE id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
                 command.Parameters.AddWithValue("@SessionId", session_id);
                 command.Parameters.AddWithValue("@SeatId", seat_id);
                 command.Parameters.AddWithValue("@Price", price);
+                command.Parameters.AddWithValue("@Sold", sold);
 
                 command.ExecuteNonQuery();
             }
@@ -75,7 +77,8 @@ namespace Kinoprokat.DataBase
                         Id = reader.GetInt32(0),
                         SessionId= reader.GetInt32(1),
                         SeatId= reader.GetInt32(2),
-                        Price= reader.GetInt32(3)
+                        Price= reader.GetInt32(3),
+                        Sold= reader.GetBoolean(4)
                     };
 
                     tickets.Add(ticket);
@@ -102,7 +105,8 @@ namespace Kinoprokat.DataBase
                         Id = reader.GetInt32(0),
                         SessionId = reader.GetInt32(1),
                         SeatId = reader.GetInt32(2),
-                        Price = reader.GetInt32(3)
+                        Price = reader.GetInt32(3),
+                        Sold = reader.GetBoolean(4)
                     };
                 }
                 else
