@@ -8,25 +8,24 @@ using System.Threading.Tasks;
 
 namespace Kinoprokat.DataBase
 {
-    class ScheduleControl
+    class ScheduleActions
     {
         private readonly string _connectionString;
 
-        public ScheduleControl(string connectionString)
+        public ScheduleActions(string connectionString)
         {
             _connectionString = connectionString;
         }
 
-        public void AddMovie(string title, DateTime year, string genre, int duration, string description)
+        public void AddSchedule(int movie_id, DateTime time, int duration, string description)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
-                var command = new SqlCommand("INSERT INTO movies (title, year, genre, duration, description) VALUES (@Title, @Year, @Genre, @Duration, @Description)", connection);
-                command.Parameters.AddWithValue("@Title", title);
-                command.Parameters.AddWithValue("@Year", year);
-                command.Parameters.AddWithValue("@Genre", genre);
+                var command = new SqlCommand("INSERT INTO schedule (movie_id, time, duration, description) VALUES (@MovieId, @Time, @Duration, @Description)", connection);
+                command.Parameters.AddWithValue("@MovieId", movie_id);
+                command.Parameters.AddWithValue("@Time", time);
                 command.Parameters.AddWithValue("@Duration", duration);
                 command.Parameters.AddWithValue("@Description", description);
 
@@ -34,49 +33,49 @@ namespace Kinoprokat.DataBase
             }
         }
 
-        public void UpdateMovie(int id, string title, DateTime year, string genre, int duration, string description)
+        public void UpdateSchedule(int id, int movie_id, DateTime time, int duration, string description)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
-                var command = new SqlCommand("UPDATE movies SET title = @Title, year = @Year, genre = @Genre, duration = @Duration, description = @Description WHERE id = @Id", connection);
+                var command = new SqlCommand("UPDATE schedule SET movie_id = @MovieId, time = @Time, duration = @Duration, description = @Description WHERE id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
-                command.Parameters.AddWithValue("@Title", title);
-                command.Parameters.AddWithValue("@Year", year);
-                command.Parameters.AddWithValue("@Genre", genre);
+                command.Parameters.AddWithValue("@MovieId", movie_id);
+                command.Parameters.AddWithValue("@Time", time);
                 command.Parameters.AddWithValue("@Duration", duration);
                 command.Parameters.AddWithValue("@Description", description);
+
                 command.ExecuteNonQuery();
             }
         }
 
-        public void DeleteMovie(int id)
+        public void DeleteSchedule(int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
-                var command = new SqlCommand("DELETE FROM movies WHERE id = @Id", connection);
+                var command = new SqlCommand("DELETE FROM schedule WHERE id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
                 command.ExecuteNonQuery();
             }
         }
 
-        public List<Movie> GetMovies()
+        public List<Schedule> GetSchedule()
         {
-            var movies = new List<Movie>();
+            var schedules = new List<Schedule>();
 
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
-                var command = new SqlCommand("SELECT * FROM movies", connection);
+                var command = new SqlCommand("SELECT * FROM schedule", connection);
 
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    var movie = new Movie()
+                    var schedule = new Schedule()
                     {
                         Id = reader.GetInt32(0),
                         Title = reader.GetString(1),
@@ -86,26 +85,26 @@ namespace Kinoprokat.DataBase
                         Description = reader.GetString(5)
                     };
 
-                    movies.Add(movie);
+                    schedules.Add(schedule);
                 }
             }
 
-            return movies;
+            return schedules;
         }
 
-        public Movie GetMovieById(int id)
+        public Schedule GetScheduleById(int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
-                var command = new SqlCommand("SELECT * FROM movies WHERE id = @Id", connection);
+                var command = new SqlCommand("SELECT * FROM schedule WHERE id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
 
                 var reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    return new Movie()
+                    return new Schedule()
                     {
                         Id = reader.GetInt32(0),
                         Title = reader.GetString(1),
