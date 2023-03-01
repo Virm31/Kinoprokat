@@ -61,13 +61,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Hall.cs" />
     <Compile Include="Classes\Movie.cs" />
     <Compile Include="Classes\Seat.cs" />
     <Compile Include="Classes\Session.cs" />
     <Compile Include="Classes\Ticket.cs" />
     <Compile Include="DataBase\DBControl.cs" />
+    <Compile Include="DataBase\HallAction.cs" />
     <Compile Include="DataBase\MovieActions.cs" />
-    <Compile Include="DataBase\SeatsActions.cs" />
+    <Compile Include="DataBase\SeatActions.cs" />
     <Compile Include="DataBase\SessionActions.cs" />
     <Compile Include="DataBase\TicketActions.cs" />
     <Compile Include="Form1.cs">
