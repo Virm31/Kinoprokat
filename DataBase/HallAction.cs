@@ -14,6 +14,12 @@ namespace Kinoprokat.DataBase
             _connectionString = connectionString;
         }
 
+        /// <summary>
+        /// Добавить зал в общий пул
+        /// </summary>
+        /// <param name="name">Название зала</param>
+        /// <param name="capacity">Вместимость</param>
+        /// <param name="screen_type">Тип экрана</param>
         public void AddHall(string name, int capacity, string screen_type)
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -29,6 +35,13 @@ namespace Kinoprokat.DataBase
             }
         }
 
+        /// <summary>
+        /// Обновить информацию по конкретному залу
+        /// </summary>
+        /// <param name="id">Id зала</param>
+        /// <param name="name">Новое имя зала</param>
+        /// <param name="capacity">Новая вместимость зала</param>
+        /// <param name="screen_type">Новый тип зала</param>
         public void UpdateHall(int id, string name, int capacity, string screen_type)
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -45,6 +58,10 @@ namespace Kinoprokat.DataBase
             }
         }
 
+        /// <summary>
+        /// Удалить кинозал по индексу
+        /// </summary>
+        /// <param name="id">Id зала</param>
         public void DeleteHall(int id)
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -57,6 +74,10 @@ namespace Kinoprokat.DataBase
             }
         }
 
+        /// <summary>
+        /// Получить список всех кинозалов
+        /// </summary>
+        /// <returns>Коллекция кинозалов</returns>
         public List<Hall> GetHalls()
         {
             var halls = new List<Hall>();
@@ -85,6 +106,11 @@ namespace Kinoprokat.DataBase
             return halls;
         }
 
+        /// <summary>
+        /// Получить кинозал по индексу
+        /// </summary>
+        /// <param name="id">Id зала</param>
+        /// <returns>Экземпляр кинозала</returns>
         public Hall GetHallById(int id)
         {
             using (var connection = new SqlConnection(_connectionString))

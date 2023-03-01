@@ -14,6 +14,14 @@ namespace Kinoprokat.DataBase
             _connectionString = connectionString;
         }
 
+        /// <summary>
+        /// Добавить фильм в общий пул
+        /// </summary>
+        /// <param name="title">Название фильма</param>
+        /// <param name="year">Дата выхода фильма в прокат</param>
+        /// <param name="genre">Жанр</param>
+        /// <param name="duration">Длительность фильма в минутах</param>
+        /// <param name="description">Описание фильма</param>
         public void AddMovie(string title, DateTime year, string genre, int duration, string description)
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -31,6 +39,15 @@ namespace Kinoprokat.DataBase
             }
         }
 
+        /// <summary>
+        /// Обновить информацию по конкретному фильму
+        /// </summary>
+        /// <param name="id">Id фильма</param>
+        /// <param name="title">Новое название фильма</param>
+        /// <param name="year">Новая дата выхода фильма в прокат</param>
+        /// <param name="genre">Новый жанр</param>
+        /// <param name="duration">Новая длительность фильма в минутах</param>
+        /// <param name="description">Новое описание фильма</param>
         public void UpdateMovie(int id, string title, DateTime year, string genre, int duration, string description)
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -48,6 +65,10 @@ namespace Kinoprokat.DataBase
             }
         }
 
+        /// <summary>
+        /// Удалить фильм по индексу
+        /// </summary>
+        /// <param name="id">Id фильма</param>
         public void DeleteMovie(int id)
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -60,6 +81,10 @@ namespace Kinoprokat.DataBase
             }
         }
 
+        /// <summary>
+        /// Получить список всех фильмов в прокате
+        /// </summary>
+        /// <returns>Коллекция фильмов</returns>
         public List<Movie> GetMovies()
         {
             var movies = new List<Movie>();
@@ -90,6 +115,11 @@ namespace Kinoprokat.DataBase
             return movies;
         }
 
+        /// <summary>
+        /// Получить фильм по индексу
+        /// </summary>
+        /// <param name="id">Id зала</param>
+        /// <returns>Экземпляр фильма</returns>
         public Movie GetMovieById(int id)
         {
             using (var connection = new SqlConnection(_connectionString))

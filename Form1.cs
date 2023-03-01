@@ -39,6 +39,7 @@ namespace Kinoprokat
             dt1 = CreateDataTable(columnNames1);
 
             
+            
             string[,] data1 = {
                 { "Фильм 1", new DateTime(2023, 3, 1).ToString(), "1", "100", "1500", "10", "150" },
                 { "Фильм 2", new DateTime(2023, 3, 8).ToString(), "2", "200", "3000", "20", "180" },
