@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Kinoprokat.DataBase
 {
-    class ScheduleActions
+    public class ScheduleActions
     {
         private readonly string _connectionString;
 

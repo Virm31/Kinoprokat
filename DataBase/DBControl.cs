@@ -14,14 +14,14 @@ namespace Kinoprokat.DataBase
         public SeatActions seatControl;
         public SessionActions sessionControl;
         public TicketActions ticketControl;
-
+        public ScheduleActions scheduleControl;
         public DBControl(string connectionString)
         {
             movieControl =new MovieActions( connectionString);
             seatControl = new SeatActions(connectionString);
             sessionControl = new SessionActions(connectionString);
             ticketControl = new TicketActions(connectionString);
-
+            scheduleControl = new ScheduleActions(connectionString);
         }
     }
 }

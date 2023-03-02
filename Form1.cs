@@ -19,11 +19,11 @@ namespace Kinoprokat
         DataTable dt1;
         DataTable dt2;
         DataTable dt3;
-        DataTable dt4;
+        DataTable filmsTable;
         string[,] data1;
         string[,] data2;
         string[,] data3;
-        string[,] data4;
+        string[,] filmsData;
         public Form1(DBControl db)
         {
             DB = db;
@@ -144,24 +144,27 @@ namespace Kinoprokat
             };
             AddDataToDataTable(dt3, data3);
 
-            string[] columnNames4 = { "Фильм", "Время начала сеанса", "Длительность",
-                "Цена", "Куплено билетов", "Осталось билетов"};
-            dt4 = CreateDataTable(columnNames4);
-            string[,] data4 = {
-                { "Фильм 1", "14:00", "2:50", "300", "120", "50"},
-                { "Фильм 1", "14:00", "2:50", "300", "120", "50"},
-                { "Фильм 1", "14:00", "2:50", "300", "120", "50"},
-                { "Фильм 1", "14:00", "2:50", "300", "120", "50"},
-                { "Фильм 1", "14:00", "2:50", "300", "120", "50"},
-                { "Фильм 1", "14:00", "2:50", "300", "120", "50"},
-                { "Фильм 1", "14:00", "2:50", "300", "120", "50"},
-                { "Фильм 1", "14:00", "2:50", "300", "120", "50"},
-            };
-            AddDataToDataTable(dt4, data4);
-            dataGridView2.DataSource = dt4;
+            string[] filmsTableColumns = { "Фильм", "Дата релиза", "Жанр",
+                "Описание", "Продолжительность" };
 
+            List<Classes.Movie> movies = DB.movieControl.GetMovies();
 
-            dataGridView3.DataSource = dt4;
+            filmsData = new string[movies.Count, 5];
+
+            for (int i = 0; i < movies.Count; i++)
+            {
+                int j = 0;
+                filmsData[i, j++] = movies[i].Title;
+                filmsData[i, j++] = movies[i].Year.ToString();
+                filmsData[i, j++] = movies[i].Genre;
+                filmsData[i, j++] = movies[i].Duration.ToString();
+                filmsData[i, j++] = movies[i].Description;
+                j = 0;
+            }
+
+            filmsTable = CreateDataTable(filmsTableColumns);
+            AddDataToDataTable(filmsTable, filmsData);
+            dataGridView3.DataSource = filmsTable;
 
         }
 
@@ -222,8 +225,10 @@ namespace Kinoprokat
             dataGridView1.DataSource = dt1;
         }
 
-        
-
-
+        private void button6_Click(object sender, EventArgs e)
+        {
+            var form = new ScheduleEditor(DB);
+            form.Show();
+        }
     }
 }

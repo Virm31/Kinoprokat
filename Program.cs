@@ -15,7 +15,7 @@ namespace Kinoprokat
         [STAThread]
         static void Main()
         {
-            DBControl db = new DBControl("Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = C:\\Users\\maxza\\source\repos\\Kinoprokat\\DataBase\\Database1.mdf; Integrated Security = True");
+            DBControl db = new DBControl("Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = C:\\Users\\salik\\source\\repos\\Kinoprokat\\DataBase\\Database1.mdf; Integrated Security = True");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
