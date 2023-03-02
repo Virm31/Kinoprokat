@@ -78,11 +78,10 @@ namespace Kinoprokat.DataBase
                     var schedule = new Schedule()
                     {
                         Id = reader.GetInt32(0),
-                        Title = reader.GetString(1),
-                        Year = reader.GetDateTime(2),
-                        Genre = reader.GetString(3),
-                        Duration = reader.GetInt32(4),
-                        Description = reader.GetString(5)
+                        MovieId= reader.GetInt32(1),
+                        Time= reader.GetDateTime(2),
+                        Duration = reader.GetInt32(3),
+                        Description = reader.GetString(4)
                     };
 
                     schedules.Add(schedule);
@@ -107,11 +106,10 @@ namespace Kinoprokat.DataBase
                     return new Schedule()
                     {
                         Id = reader.GetInt32(0),
-                        Title = reader.GetString(1),
-                        Year = reader.GetDateTime(2),
-                        Genre = reader.GetString(3),
-                        Duration = reader.GetInt32(4),
-                        Description = reader.GetString(5)
+                        MovieId = reader.GetInt32(1),
+                        Time = reader.GetDateTime(2),
+                        Duration = reader.GetInt32(3),
+                        Description = reader.GetString(4)
                     };
                 }
                 else
