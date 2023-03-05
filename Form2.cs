@@ -9,75 +9,44 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Kinoprokat.DataBase;
 using Kinoprokat.Classes;
+using System.Globalization;
 
 namespace Kinoprokat
 {
     public partial class ScheduleEditor : Form
     {
         DBControl DB;
-        int currentTime = 9 * 60; //9 утра в минутах
-        int timeOut = 20;//20 минут перерыва
+        int currentTime = 9 * 60;
+        int timeOut = 20;
         int endTime = 24 * 60 + 2 * 60;
-        List<Schedule> schedules;
-        List<Schedule> newSchedules;
-        Dictionary<string, int> catalog;
+        public Form1 MainForm { get; internal set; }
 
+        string[] defaultTime = { "09:00", "10:00", "11:00", "12:00", "13:00", "14:00",
+                "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00",
+                "23:00", "00:00", "01:00" };
 
         public ScheduleEditor(DBControl db)
         {
             DB = db;
-            schedules = DB.scheduleControl.GetSchedule();
-            LoadSchedules();
+ 
             InitializeComponent();
         }
 
         private void checkAddIdButton_Click(object sender, EventArgs e)
         {
-            string[] defaultTime = { "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
-                "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00",
-                "23:00", "00:00", "01:00" };
-
-            if (DB.movieControl.GetMovies().Contains
-                (DB.movieControl.GetMovieById(Convert.ToInt32(AddIdInput.Text))))
-            {
-                if(DB.scheduleControl.GetSchedule().Count == 0)
-                {
-                    foreach(var time in defaultTime)
-                    {
-                        freeTime.Items.Add(time);
-                    }
-                }
-                else //В данной версии не учитыватся, что вставляется куда попало поэтому крашнется
-                {
-                    freeTime.Items.Add(MinutesToTime(currentTime));
-                    int nextTimesIndex = 0;
-
-                    foreach (var time in defaultTime)
-                    {
-                        while(currentTime > TimeToMinutes(defaultTime[nextTimesIndex]))
-                        {
-                            nextTimesIndex++;
-                        }
-                        break;
-                    }
-
-                    while (nextTimesIndex < defaultTime.Length)
-                    {
-                        freeTime.Items.Add(defaultTime[nextTimesIndex]);
-                        nextTimesIndex++;
-                    }
-                }
-            }
-            else
-            {
-                //Сообщить об отсутствии
-            }
+           
         }
 
         private int TimeToMinutes(string time)
         {
-            string[] hoursAndMinutes = time.Split(':');
-            return Convert.ToInt32(hoursAndMinutes[0], 10) * 60 + Convert.ToInt32(hoursAndMinutes[1]);
+            int hours = int.Parse(time.Substring(0, 2));
+            int minutes = int.Parse(time.Substring(3, 2));
+
+            if (hours == 0) { hours = 24; }
+            if (hours == 1) { hours = 25; }
+            if (hours == 2) { hours = 26; }
+
+            return hours * 60 + minutes;
         }
 
         private string MinutesToTime(int minutes)
@@ -98,76 +67,169 @@ namespace Kinoprokat
 
         private void AddFilmButton_Click(object sender, EventArgs e)
         {
-            var movie = DB.movieControl.GetMovieById(Convert.ToInt32(AddIdInput.Text));
-            if (currentTime + movie.Duration < endTime)
-            {
-                DB.scheduleControl.AddSchedule(movie.Id, DateTime.ParseExact(freeTime.Text, "H:mm", null),
-                    movie.Duration, movie.Description);
 
-                schedules = DB.scheduleControl.GetSchedule();
-                LoadSchedules();
-
-                currentTime += movie.Duration + timeOut;
-            }
-            else
+            if(AddFilmsInput.Text == string.Empty)
             {
-                //Сообщить о выходе за пределы рабочего времени
+                MessageBox.Show("Ошибка! Невозможно выполнить операцию. Не выбран фильм",
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
+            if (freeTime.Text == string.Empty)
+            {
+                MessageBox.Show("Ошибка! Невозможно выполнить операцию. Начало фильма не выбрано",
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+
+            var movie = DB.movieControl.GetMovieById(Convert.ToInt32(AddFilmsInput.Text));
+
+            if((TimeToMinutes(freeTime.Text) + movie.Duration + timeOut) > endTime)
+            {
+                MessageBox.Show("Ошибка! Невозможно выполнить операцию. Начало фильма слишком поздно",
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            Console.WriteLine((TimeToMinutes(freeTime.Text).ToString()));
+
+            DB.scheduleControl.AddSchedule(movie.Id, 
+                DateTime.ParseExact(freeTime.Text, "HH:mm", CultureInfo.InvariantCulture),
+                movie.Duration, movie.Description);
+
+            LoadAvailableStartTime(freeTime.Text, movie.Duration);
+            MainForm.FillScheduleTable();
+            MainForm.FillSessionsTable();
+            OldFilmsList.Items.Clear();
+            LoadSchedules();
         }
 
         private void checkRemoveIdButton_Click(object sender, EventArgs e)
         {
-            if (DB.movieControl.GetMovies().Contains
-                (DB.movieControl.GetMovieById(Convert.ToInt32(RemoveIdInput.Text))))
-            {
-                //Сообщить об успехе
-            }
-            else
-            {
-                //Сообщить об отсутствии
-            }
+           
         }
 
         private void RemoveFilmButton_Click(object sender, EventArgs e)
         {
             var movie = DB.movieControl.GetMovieById(Convert.ToInt32(RemoveIdInput.Text));
-            DB.scheduleControl.DeleteSchedule(movie.Id);
-            schedules = DB.scheduleControl.GetSchedule();
-            LoadSchedules();
+            DB.scheduleControl.DeleteScheduleByMovieId(movie.Id);
+            MainForm.FillScheduleTable();
+            OldFilmsList.Items.Clear();
+            LoadSchedules();;
         }
 
         private void RightMoveButton_Click(object sender, EventArgs e)
         {
-            foreach (var item in OldFilmsList.SelectedItems)
-            {
-                OldFilmsList.Items.Add(item);
-                NewFilmsList.Items.Remove(item);
-            }
+            var value = (string)OldFilmsList.SelectedItem;
+            NewFilmsList.Items.Add(value);
+            OldFilmsList.Items.Remove(value);
         }
 
         private void LeftMoveButton_Click(object sender, EventArgs e)
         {
-            foreach (var item in NewFilmsList.SelectedItems)
-            {
-                NewFilmsList.Items.Add(item);
-                OldFilmsList.Items.Remove(item);
-            }
+            var value = (string)NewFilmsList.SelectedItem;
+            NewFilmsList.Items.Remove(value);
+            OldFilmsList.Items.Add(value);
         }
 
         private void LoadSchedules()
         {
-            foreach (var movie in schedules)
+            foreach (var movie in DB.scheduleControl.GetSchedule())
             {
                 OldFilmsList.Items.Add(DB.movieControl.GetMovieById(movie.MovieId).Title);
-                catalog.Add(DB.movieControl.GetMovieById(movie.MovieId).Title,
-                    DB.movieControl.GetMovieById(movie.MovieId).Id);
             }
         }
 
         private void SaveSeqButton_Click(object sender, EventArgs e)
         {
-            //заново добавить фильмы в шедул лист
+            foreach(var item in NewFilmsList.Items)
+            {
+                var movies = DB.movieControl.GetMovies();
+                int movieId = 0;
+
+                foreach (var movie in movies)
+                {
+                    if (movie.Title == item.ToString())
+                    {
+                        movieId = movie.Id;
+                    }
+                }
+
+                var schedule = DB.scheduleControl.GetScheduleByMovieId(movieId);
+                DB.scheduleControl.DeleteSchedule(schedule.Id);
+                DB.scheduleControl.AddSchedule(schedule.MovieId, schedule.Time,
+                    schedule.Duration, schedule.Description);
+            }
+
+            MainForm.FillScheduleTable();
+            LoadSchedules();
+            NewFilmsList.Items.Clear();
+        }
+
+        private void ScheduleEditor_Load(object sender, EventArgs e)
+        {
+            LoadFilmsID();
+            LoadAvailableStartTime();
+            LoadSchedules();
+        }
+
+        private void LoadFilmsID()
+        {
+            AddFilmsInput.Items.Clear();
+            RemoveIdInput.Items.Clear();
+            var movies = DB.movieControl.GetMovies();
+
+            foreach (var movie in movies)
+            {
+                RemoveIdInput.Items.Add(movie.Id);
+                AddFilmsInput.Items.Add(movie.Id);
+            }
+        }
+
+        private void LoadAvailableStartTime(string start, int duration)
+        {
+            freeTime.Items.Clear();
+
+            var currentTime = TimeNormalize(TimeToMinutes(start) + duration + timeOut);
+            var cutIndex = 0;
+            for (int i = 0; i < defaultTime.Length; i++)
+            {
+                if(currentTime > TimeToMinutes(defaultTime[i]))
+                {
+                    cutIndex = i + 1;
+                }
+                else
+                {
+                    i = defaultTime.Length;
+                }
+            }
+
+            int elementsToDelete = defaultTime.Length - cutIndex;
+
+            string[] newTimes = new string[elementsToDelete];
+
+            for (int i = 0; i < elementsToDelete; i++)
+            {
+                newTimes[i] = defaultTime[i + cutIndex];
+            }
+
+            freeTime.Items.Add(MinutesToTime(currentTime));
+
+            foreach (var time in newTimes)
+            {
+                freeTime.Items.Add(time);
+            }
+        }
+
+        private void LoadAvailableStartTime()
+        {
+            freeTime.Items.Clear();
+
+            foreach (var time in defaultTime)
+            {
+                freeTime.Items.Add(time);
+            }
         }
     }
 }

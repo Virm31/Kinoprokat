@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,10 +21,14 @@ namespace Kinoprokat
         DataTable dt2;
         DataTable dt3;
         DataTable filmsTable;
+        DataTable sessionsTable;
+        DataTable scheduleTable;
         string[,] data1;
         string[,] data2;
         string[,] data3;
         string[,] filmsData;
+        string[,] sessionsData;
+        string[,] scheduleData;
         public Form1(DBControl db)
         {
             DB = db;
@@ -144,28 +149,9 @@ namespace Kinoprokat
             };
             AddDataToDataTable(dt3, data3);
 
-            string[] filmsTableColumns = { "Фильм", "Дата релиза", "Жанр",
-                "Описание", "Продолжительность" };
-
-            List<Classes.Movie> movies = DB.movieControl.GetMovies();
-
-            filmsData = new string[movies.Count, 5];
-
-            for (int i = 0; i < movies.Count; i++)
-            {
-                int j = 0;
-                filmsData[i, j++] = movies[i].Title;
-                filmsData[i, j++] = movies[i].Year.ToString();
-                filmsData[i, j++] = movies[i].Genre;
-                filmsData[i, j++] = movies[i].Duration.ToString();
-                filmsData[i, j++] = movies[i].Description;
-                j = 0;
-            }
-
-            filmsTable = CreateDataTable(filmsTableColumns);
-            AddDataToDataTable(filmsTable, filmsData);
-            dataGridView3.DataSource = filmsTable;
-
+            FillFilmsTable();
+            FillScheduleTable();
+            FillSessionsTable();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -228,7 +214,92 @@ namespace Kinoprokat
         private void button6_Click(object sender, EventArgs e)
         {
             var form = new ScheduleEditor(DB);
+            form.MainForm = this;
             form.Show();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            var form = new MovieEditor(DB);
+            form.Show();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var form = new SessionsEditor(DB);
+            form.MainForm = this;
+            form.Show();
+        }
+
+        public void FillFilmsTable()
+        {
+            string[] filmsTableColumns = { "Фильм", "Дата релиза", "Жанр",
+                "Описание", "Продолжительность" };
+
+            List<Classes.Movie> movies = DB.movieControl.GetMovies();
+
+            filmsData = new string[movies.Count, 5];
+
+            for (int i = 0; i < movies.Count; i++)
+            {
+                int j = 0;
+                filmsData[i, j++] = movies[i].Title;
+                filmsData[i, j++] = movies[i].Year.ToString("dd.MM.yyyy");
+                filmsData[i, j++] = movies[i].Genre;
+                filmsData[i, j++] = movies[i].Description;
+                filmsData[i, j++] = movies[i].Duration.ToString() + " мин";
+                j = 0;
+            }
+
+            filmsTable = CreateDataTable(filmsTableColumns);
+            AddDataToDataTable(filmsTable, filmsData);
+            dataGridView3.DataSource = filmsTable;
+        }
+
+        public void FillScheduleTable()
+        {
+            string[] scheduleTableColumns = { "Фильм", "Начало", "Продолжительность",
+                "Описание" };
+
+            List<Classes.Schedule> schedule = DB.scheduleControl.GetSchedule();
+
+            scheduleData = new string[schedule.Count, 4];
+
+            for (int i = 0; i < schedule.Count; i++)
+            {
+                int j = 0;
+                scheduleData[i, j++] = DB.movieControl.GetMovieById(schedule[i].MovieId).Title;
+                scheduleData[i, j++] = schedule[i].Time.ToString("HH:mm");
+                scheduleData[i, j++] = schedule[i].Duration.ToString() + " мин";
+                scheduleData[i, j++] = schedule[i].Description;
+                j = 0;
+            }
+
+            scheduleTable = CreateDataTable(scheduleTableColumns);
+            AddDataToDataTable(scheduleTable, scheduleData);
+            dataGridView2.DataSource = scheduleTable;
+        }
+
+        public void FillSessionsTable()
+        {
+            string[] sessionsTableColumns = { "Фильм", "Зал", "Время начала" };
+
+            List<Classes.Session> sessions = DB.sessionControl.GetSessions();
+
+            sessionsData = new string[sessions.Count, 3];
+
+            for (int i = 0; i < sessions.Count; i++)
+            {
+                int j = 0;
+                sessionsData[i, j++] = DB.movieControl.GetMovieById(sessions[i].MovieId).Title;
+                sessionsData[i, j++] = DB.hallControl.GetHallById(sessions[i].HallId).Name;
+                sessionsData[i, j++] = DB.scheduleControl.GetScheduleByMovieId(sessions[i].MovieId).Time.ToString("hh:mm");
+                j = 0;
+            }
+
+            sessionsTable = CreateDataTable(sessionsTableColumns);
+            AddDataToDataTable(sessionsTable, sessionsData);
+            dataGridView4.DataSource = sessionsTable;
         }
     }
 }

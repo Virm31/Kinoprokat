@@ -15,6 +15,7 @@ namespace Kinoprokat.DataBase
         public SessionActions sessionControl;
         public TicketActions ticketControl;
         public ScheduleActions scheduleControl;
+        public HallAction hallControl;
         public DBControl(string connectionString)
         {
             movieControl =new MovieActions( connectionString);
@@ -22,6 +23,7 @@ namespace Kinoprokat.DataBase
             sessionControl = new SessionActions(connectionString);
             ticketControl = new TicketActions(connectionString);
             scheduleControl = new ScheduleActions(connectionString);
+            hallControl = new HallAction(connectionString);
         }
     }
 }
