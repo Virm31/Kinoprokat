@@ -38,15 +38,15 @@ namespace Kinoprokat
                 return;
             }
 
-            var date = new DateTime();
+            //var date = new DateTime();
 
-            if (!(DateTime.TryParseExact(filmYear.Text, "dd.MM.yyyy",
-                CultureInfo.InvariantCulture, DateTimeStyles.None, out date)))
-            {
-                MessageBox.Show("Ошибка! Невозможно выполнить операцию. Формат даты не dd.mm.yyyy",
-                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            //if (!(DateTime.TryParseExact(filmYear.Text, "dd.MM.yyyy",
+            //    CultureInfo.InvariantCulture, DateTimeStyles.None, out date)))
+            //{
+            //    MessageBox.Show("Ошибка! Невозможно выполнить операцию. Формат даты не dd.mm.yyyy",
+            //        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //    return;
+            //}
 
             var time = 0;
 
@@ -57,8 +57,8 @@ namespace Kinoprokat
                 return;
             }
 
-            DB.movieControl.AddMovie(filmTitle.Text, date,
-            filmGenre.Text, time, filmDesc.Text);
+            DB.movieControl.AddMovie(filmTitle.Text, filmYear.Value,
+            filmGenre.Text, time, filmDesc.Text); 
 
             MainForm.FillFilmsTable();
             LoadFilmsID();
@@ -73,10 +73,12 @@ namespace Kinoprokat
 
         private void RemoveButton_Click(object sender, EventArgs e)
         {
+            DB.scheduleControl.DeleteScheduleByMovieId(Convert.ToInt32(RemoveIDList.Text));
             DB.movieControl.DeleteMovie(Convert.ToInt32(RemoveIDList.Text));
             MainForm.FillFilmsTable();
             LoadFilmsID();
             RemoveIDList.Text = "";
+            MainForm.FillScheduleTable();
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -112,6 +114,14 @@ namespace Kinoprokat
             foreach (var genre in genres)
             {
                 filmGenre.Items.Add(genre);
+            }
+        }
+
+        private void filmDuration_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != 8)
+            {
+                e.Handled = true;
             }
         }
     }

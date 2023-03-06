@@ -269,7 +269,7 @@ namespace Kinoprokat
             {
                 int j = 0;
                 scheduleData[i, j++] = DB.movieControl.GetMovieById(schedule[i].MovieId).Title;
-                scheduleData[i, j++] = schedule[i].Time.ToString("HH:mm");
+                scheduleData[i, j++] = schedule[i].Time.ToShortTimeString();
                 scheduleData[i, j++] = schedule[i].Duration.ToString() + " мин";
                 scheduleData[i, j++] = schedule[i].Description;
                 j = 0;
@@ -293,7 +293,8 @@ namespace Kinoprokat
                 int j = 0;
                 sessionsData[i, j++] = DB.movieControl.GetMovieById(sessions[i].MovieId).Title;
                 sessionsData[i, j++] = DB.hallControl.GetHallById(sessions[i].HallId).Name;
-                sessionsData[i, j++] = DB.scheduleControl.GetScheduleByMovieId(sessions[i].MovieId).Time.ToString("hh:mm");
+                sessionsData[i, j++] = DB.scheduleControl.GetScheduleByMovieId(sessions[i].MovieId).
+                    Time.ToString("hh:mm");
                 j = 0;
             }
 

@@ -30,20 +30,20 @@ namespace Kinoprokat
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.filmGenre = new System.Windows.Forms.ComboBox();
+            this.filmDesc = new System.Windows.Forms.RichTextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.filmTitle = new System.Windows.Forms.TextBox();
-            this.filmYear = new System.Windows.Forms.TextBox();
             this.filmDuration = new System.Windows.Forms.TextBox();
             this.AddButton = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
             this.RemoveButton = new System.Windows.Forms.Button();
             this.RemoveIDList = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.filmDesc = new System.Windows.Forms.RichTextBox();
-            this.filmGenre = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.filmYear = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -60,6 +60,7 @@ namespace Kinoprokat
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.filmYear);
             this.splitContainer1.Panel1.Controls.Add(this.filmGenre);
             this.splitContainer1.Panel1.Controls.Add(this.filmDesc);
             this.splitContainer1.Panel1.Controls.Add(this.label5);
@@ -68,7 +69,6 @@ namespace Kinoprokat
             this.splitContainer1.Panel1.Controls.Add(this.label2);
             this.splitContainer1.Panel1.Controls.Add(this.label1);
             this.splitContainer1.Panel1.Controls.Add(this.filmTitle);
-            this.splitContainer1.Panel1.Controls.Add(this.filmYear);
             this.splitContainer1.Panel1.Controls.Add(this.filmDuration);
             this.splitContainer1.Panel1.Controls.Add(this.AddButton);
             // 
@@ -82,6 +82,67 @@ namespace Kinoprokat
             this.splitContainer1.SplitterWidth = 3;
             this.splitContainer1.TabIndex = 0;
             // 
+            // filmGenre
+            // 
+            this.filmGenre.FormattingEnabled = true;
+            this.filmGenre.Location = new System.Drawing.Point(19, 150);
+            this.filmGenre.Name = "filmGenre";
+            this.filmGenre.Size = new System.Drawing.Size(152, 21);
+            this.filmGenre.TabIndex = 14;
+            // 
+            // filmDesc
+            // 
+            this.filmDesc.Location = new System.Drawing.Point(19, 248);
+            this.filmDesc.Name = "filmDesc";
+            this.filmDesc.Size = new System.Drawing.Size(152, 79);
+            this.filmDesc.TabIndex = 13;
+            this.filmDesc.Text = "";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(16, 232);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(57, 13);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Описание";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(16, 185);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(111, 13);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "Продолжительность";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(16, 134);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(36, 13);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "Жанр";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(16, 79);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(72, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Дата релиза";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(16, 30);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(57, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Название";
+            // 
             // filmTitle
             // 
             this.filmTitle.Location = new System.Drawing.Point(19, 45);
@@ -89,14 +150,6 @@ namespace Kinoprokat
             this.filmTitle.Name = "filmTitle";
             this.filmTitle.Size = new System.Drawing.Size(152, 20);
             this.filmTitle.TabIndex = 7;
-            // 
-            // filmYear
-            // 
-            this.filmYear.Location = new System.Drawing.Point(19, 96);
-            this.filmYear.Margin = new System.Windows.Forms.Padding(2);
-            this.filmYear.Name = "filmYear";
-            this.filmYear.Size = new System.Drawing.Size(152, 20);
-            this.filmYear.TabIndex = 5;
             // 
             // filmDuration
             // 
@@ -106,6 +159,7 @@ namespace Kinoprokat
             this.filmDuration.Size = new System.Drawing.Size(152, 20);
             this.filmDuration.TabIndex = 4;
             this.filmDuration.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            this.filmDuration.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.filmDuration_KeyPress);
             // 
             // AddButton
             // 
@@ -117,6 +171,15 @@ namespace Kinoprokat
             this.AddButton.Text = "Добавить";
             this.AddButton.UseVisualStyleBackColor = true;
             this.AddButton.Click += new System.EventHandler(this.AddButton_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(16, 32);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(61, 13);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "ID фильма";
             // 
             // RemoveButton
             // 
@@ -138,75 +201,12 @@ namespace Kinoprokat
             this.RemoveIDList.Size = new System.Drawing.Size(152, 21);
             this.RemoveIDList.TabIndex = 2;
             // 
-            // label1
+            // filmYear
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 30);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(57, 13);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Название";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 79);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(72, 13);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Дата релиза";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(16, 134);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(36, 13);
-            this.label3.TabIndex = 10;
-            this.label3.Text = "Жанр";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(16, 185);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(111, 13);
-            this.label4.TabIndex = 11;
-            this.label4.Text = "Продолжительность";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(16, 232);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(57, 13);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "Описание";
-            // 
-            // filmDesc
-            // 
-            this.filmDesc.Location = new System.Drawing.Point(19, 248);
-            this.filmDesc.Name = "filmDesc";
-            this.filmDesc.Size = new System.Drawing.Size(152, 79);
-            this.filmDesc.TabIndex = 13;
-            this.filmDesc.Text = "";
-            // 
-            // filmGenre
-            // 
-            this.filmGenre.FormattingEnabled = true;
-            this.filmGenre.Location = new System.Drawing.Point(19, 150);
-            this.filmGenre.Name = "filmGenre";
-            this.filmGenre.Size = new System.Drawing.Size(152, 21);
-            this.filmGenre.TabIndex = 14;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(16, 32);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(61, 13);
-            this.label6.TabIndex = 15;
-            this.label6.Text = "ID фильма";
+            this.filmYear.Location = new System.Drawing.Point(19, 95);
+            this.filmYear.Name = "filmYear";
+            this.filmYear.Size = new System.Drawing.Size(152, 20);
+            this.filmYear.TabIndex = 15;
             // 
             // SessionsEditor
             // 
@@ -234,7 +234,6 @@ namespace Kinoprokat
         private System.Windows.Forms.Button AddButton;
         private System.Windows.Forms.Button RemoveButton;
         private System.Windows.Forms.ComboBox RemoveIDList;
-        private System.Windows.Forms.TextBox filmYear;
         private System.Windows.Forms.TextBox filmDuration;
         private System.Windows.Forms.TextBox filmTitle;
         private System.Windows.Forms.RichTextBox filmDesc;
@@ -245,5 +244,6 @@ namespace Kinoprokat
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox filmGenre;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.DateTimePicker filmYear;
     }
 }

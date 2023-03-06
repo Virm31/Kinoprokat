@@ -116,7 +116,7 @@ namespace Kinoprokat
             DB.scheduleControl.DeleteScheduleByMovieId(movie.Id);
             MainForm.FillScheduleTable();
             OldFilmsList.Items.Clear();
-            LoadSchedules();;
+            LoadSchedules();
         }
 
         private void RightMoveButton_Click(object sender, EventArgs e)
