@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kinoprokat.Classes
 {
-    class Schedule
+    public class Schedule
     {
         /// <summary>
         /// Порядковый номер сеанса в расписании
